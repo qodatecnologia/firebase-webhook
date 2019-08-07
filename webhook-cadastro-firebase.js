@@ -9,18 +9,18 @@ const {WebhookClient} = require('dialogflow-fulfillment');
 const {Card, Suggestion} = require('dialogflow-fulfillment');
  
 process.env.DEBUG = 'dialogflow:debug'; // enables lib debugging statements
-
+ 
 const admin = require('firebase-admin');
 admin.initializeApp({
   credential: admin.credential.applicationDefault(),
-  databaseURL: 'https://cadastrador-exuytm.firebaseio.com/',
+  databaseURL: 'https://alita-343fa.firebaseio.com/',
 }); 
 
 exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, response) => {
   const agent = new WebhookClient({ request, response });
   console.log('Dialogflow Request headers: ' + JSON.stringify(request.headers));
   console.log('Dialogflow Request body: ' + JSON.stringify(request.body));
-});
+ 
   function welcome(agent) {
     agent.add(`Welcome to my agent!`);
   }
@@ -29,8 +29,15 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
     agent.add(`I didn't understand`);
     agent.add(`I'm sorry, can you try again?`);
   }
+  
+  function hora(agent){
+  	var data = new Date();
+    var h = data.getHours();
+    var m = data.getMinutes();
+    agent.add('Agora são: ' +h+'h'+m);
+  }
 
-function cadastro_func(agent) {
+  function cadastro_func(agent) {
     var newKey = admin.database().ref().child('agendados').push().key; //cria chave única
     
     admin.database().ref('agendados/'+newKey).set({ 
@@ -38,7 +45,7 @@ function cadastro_func(agent) {
 		email: agent.parameters.email});
     agent.add('Confirmado!');
 }
-
+  
   // // Uncomment and edit to make your own intent handler
   // // uncomment `intentMap.set('your intent name here', yourFunctionHandler);`
   // // below to get this function to be run when a Dialogflow intent is matched
@@ -72,6 +79,7 @@ function cadastro_func(agent) {
   let intentMap = new Map();
   intentMap.set('Default Welcome Intent', welcome);
   intentMap.set('Default Fallback Intent', fallback);
+  intentMap.set('horario', hora);
   intentMap.set('cadastro', cadastro_func);
-  // intentMap.set('your intent name here', googleAssistantHandler);
-  //agent.handleRequest(intentMap);
+  agent.handleRequest(intentMap);
+});
