@@ -12,3 +12,4 @@ function cadastro_func(agent) {
 		date: agent.parameters.date,
 		time: agent.parameters.time
     });
+agent.add('Confirmado!'); //confirma agendamento
