@@ -13,7 +13,7 @@ process.env.DEBUG = 'dialogflow:debug'; // enables lib debugging statements
 const admin = require('firebase-admin');
 admin.initializeApp({
   credential: admin.credential.applicationDefault(),
-  databaseURL: 'https://alita-343fa.firebaseio.com/',
+  databaseURL: 'SUA_URL_AQUI',
 }); 
 
 exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, response) => {
